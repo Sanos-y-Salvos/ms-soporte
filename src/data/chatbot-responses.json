@@ -1,0 +1,30 @@
+[
+  {
+    "keywords": ["hola", "saludo", "buen", "dia", "tarde", "noche"],
+    "response": "¡Hola! Soy el asistente virtual de Sanos y Salvos. ¿En qué te puedo ayudar hoy respecto a mascotas perdidas o encontradas?"
+  },
+  {
+    "keywords": ["reportar", "perdida", "encontrada", "publicar", "subir", "crear reporte", "perro", "gato"],
+    "response": "Para reportar una mascota perdida o encontrada, dirígete a la sección 'Reportar', completa el formulario con los datos, añade fotos, indica la ubicación y publícalo."
+  },
+  {
+    "keywords": ["coincidencia", "match", "matching", "sistema", "funciona"],
+    "response": "Nuestro sistema compara automáticamente los reportes de mascotas perdidas con las encontradas utilizando las características ingresadas. Te enviaremos una notificación si hay un posible match."
+  },
+  {
+    "keywords": ["mapa", "ubicacion", "ver", "cerca", "zona"],
+    "response": "Puedes utilizar el mapa interactivo para visualizar los reportes cercanos a tu ubicación actual o buscar reportes en una zona específica de Chile."
+  },
+  {
+    "keywords": ["contactar", "hablar", "mensaje", "dueño", "encuentro", "comunicar"],
+    "response": "Cuando se confirma una coincidencia, se habilitará la opción para ver los datos de contacto o acceder a un chat con el otro usuario para coordinar la entrega."
+  },
+  {
+    "keywords": ["cuenta", "perfil", "registro", "contraseña", "datos", "actualizar", "crear"],
+    "response": "Puedes gestionar tu cuenta, actualizar tu información personal o cambiar tu contraseña ingresando a la sección 'Mi Cuenta'."
+  },
+  {
+    "keywords": ["ticket", "soporte", "ayuda", "tecnico", "error", "falla", "problema"],
+    "response": "Si estás experimentando problemas técnicos, por favor crea un ticket de soporte detallando el error y nuestro equipo te ayudará a la brevedad."
+  }
+]

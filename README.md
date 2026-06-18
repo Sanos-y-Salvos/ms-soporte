@@ -19,7 +19,7 @@ Microservicio de soporte técnico de la plataforma **Sanos y Salvos**. Gestiona 
 | TypeScript | Tipado estático |
 | PostgreSQL + TypeORM | Persistencia de tickets y comentarios |
 | JWT (jsonwebtoken) | Verificación de tokens |
-| Groq API (Llama 3) | Chatbot con IA para preguntas frecuentes |
+| Archivo JSON | Chatbot basado en reglas para preguntas frecuentes |
 | Swagger (OpenAPI 3.0) | Documentación de endpoints |
 
 ---
@@ -28,7 +28,6 @@ Microservicio de soporte técnico de la plataforma **Sanos y Salvos**. Gestiona 
 
 - Node.js 18+
 - PostgreSQL 16+
-- Cuenta gratuita en [Groq](https://console.groq.com)
 
 ---
 
@@ -59,9 +58,6 @@ DB_NAME=ms_soporte
 # JWT (mismo secret que MS-Auth)
 JWT_SECRET=tu_secreto_super_seguro
 JWT_EXPIRES_IN=15m
-
-# Groq
-GROQ_API_KEY=tu_groq_api_key
 
 NODE_ENV=development
 TYPEORM_SYNCHRONIZE=true
@@ -311,7 +307,7 @@ ms-soporte/
 │   │   └── chatbot.routes.ts
 │   ├── services/
 │   │   ├── ticket.service.ts
-│   │   └── chatbot.service.ts  # Integración con Groq API
+│   │   └── chatbot.service.ts  # Integración del Chatbot con archivo JSON
 │   ├── utils/
 │   │   └── response.ts
 │   ├── app.ts
@@ -336,7 +332,7 @@ ms-soporte/
 
 ## Decisiones técnicas
 
-- **Groq API con Llama 3:** chatbot gratuito con modelo de lenguaje real, sin necesidad de tarjeta de crédito. Contexto del sistema configurado exclusivamente para responder sobre Sanos y Salvos.
+- **Chatbot basado en JSON:** Permite respuestas rápidas a preguntas frecuentes usando un archivo local sin depender de APIs externas.
 - **Hilo único de comentarios:** usuarios y administradores comparten el mismo hilo identificados por `tipo_autor`, facilitando el seguimiento cronológico de la conversación.
 - **Middleware `soloAdmin`:** protege todos los endpoints administrativos verificando que el rol en el JWT sea `administrador`.
 - **Soft close de tickets:** los tickets cerrados no aceptan nuevos comentarios pero el historial se conserva íntegro en la base de datos.
