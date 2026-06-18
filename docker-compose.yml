@@ -47,6 +47,9 @@ services:
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-15m}
       GROQ_API_KEY: ${GROQ_API_KEY:-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}
       TYPEORM_SYNCHRONIZE: "true"
+      # Sin esta variable cae al fallback 'http://localhost:3001' del código,
+      # que no resuelve dentro de la red Docker — debe apuntar al contenedor de ms-auth.
+      MS_AUTH_URL: http://ms-auth:3001
     depends_on:
       db-ms-soporte:
         condition: service_healthy
