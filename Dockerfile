@@ -10,6 +10,7 @@ COPY tsconfig.json ./
 COPY src ./src
 
 RUN npm run build
+RUN cp -r src/data dist/data
 
 # Etapa 2 — Producción
 FROM node:20-alpine AS production

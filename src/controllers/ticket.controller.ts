@@ -10,8 +10,10 @@ export const crearTicket = async (req: AuthRequest, res: Response): Promise<void
   try {
     const userId = req.user!.id;
     const { categoria, asunto, descripcion } = req.body;
-    if (!categoria || !asunto || !descripcion) { errorResponse(res, 'Categoría, asunto y descripción requeridos'); return; }
-    const data = await TicketService.crearTicket(userId, categoria as CategoriaTicket, asunto, descripcion);
+    if (!categoria || !descripcion) { errorResponse(res, 'Categoría y descripción requeridos'); return; }
+    const asuntoFinal = asunto || (categoria === 'problema_tecnico' ? 'Problema técnico' : categoria === 'reporte_abuso' ? 'Reporte de abuso' : '');
+    if (!asuntoFinal) { errorResponse(res, 'El asunto es requerido para la categoría "Otro"'); return; }
+    const data = await TicketService.crearTicket(userId, categoria as CategoriaTicket, asuntoFinal, descripcion);
     successResponse(res, data, 201);
   } catch (err: any) {
     errorResponse(res, err.message);

@@ -24,11 +24,11 @@ services:
 
   ms-soporte:
     container_name: ms-soporte
-    image: felruiz/ms-soporte:latest
+    #image: felruiz/ms-soporte:latest
     build:
       context: .
       dockerfile: Dockerfile
-    platform: linux/amd64
+    #platform: linux/amd64
     ports:
       - "3005:3005" # Puerto actualizado a 3005
     environment:

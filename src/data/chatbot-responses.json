@@ -1,30 +1,58 @@
 [
   {
-    "keywords": ["hola", "saludo", "buen", "dia", "tarde", "noche"],
-    "response": "¡Hola! Soy el asistente virtual de Sanos y Salvos. ¿En qué te puedo ayudar?"
+    "keywords": ["hola", "buenas", "saludos", "buen dia", "buen tarde", "buen noche"],
+    "response": "¡Hola! Soy el asistente virtual de Sanos y Salvos 🐾. Puedo ayudarte con: reportar mascotas, buscar en el mapa, gestionar tu cuenta, entender el sistema de matching o crear un ticket de soporte. ¿En qué te puedo ayudar?"
   },
   {
-    "keywords": ["reportar", "perdida", "encontrada", "publicar", "subir", "crear reporte", "perro", "gato"],
-    "response": "Para reportar una mascota perdida o encontrada, dirígete a la sección 'Reportar', completa el formulario con los datos, añade fotos, indica la ubicación y publícalo."
+    "keywords": ["perdida", "perdi", "se perdio", "perdido", "perdida mascota"],
+    "response": "Si perdiste una mascota, reporta la pérdida lo antes posible:\n1. Ve a 'Reportar' y elige 'Mascota Perdida'.\n2. Agrega fotos recientes y describe la mascota: color, tamaño y marcas.\n3. Indica la zona donde desapareció.\n4. El sistema comparará tu reporte con mascotas encontradas y te avisará si hay coincidencia."
   },
   {
-    "keywords": ["coincidencia", "match", "matching", "sistema", "funciona"],
-    "response": "Nuestro sistema compara automáticamente los reportes de mascotas perdidas con las encontradas utilizando las características ingresadas. Te enviaremos una notificación si hay un posible match."
+    "keywords": ["encontre", "encontrada", "halle", "mascota encontrada"],
+    "response": "Si encontraste una mascota:\n1. Ve a 'Reportar' y elige 'Mascota Encontrada'.\n2. Sube fotos y describe sus características.\n3. Indica dónde la encontraste.\n4. El sistema buscará reportes de mascotas perdidas similares y notificará al dueño si hay match."
   },
   {
-    "keywords": ["mapa", "ubicacion", "ver", "cerca", "zona"],
-    "response": "Puedes utilizar el mapa interactivo para visualizar los reportes cercanos a tu ubicación actual o buscar reportes en una zona específica de Chile."
+    "keywords": ["reporte", "reportar", "publicar", "publicacion", "subir"],
+    "response": "Para crear un reporte sigue estos pasos:\n1. Inicia sesión en tu cuenta.\n2. Haz clic en 'Reportar' en el menú.\n3. Selecciona si la mascota está 'Perdida' o 'Encontrada'.\n4. Completa el formulario: especie, raza, color, tamaño y descripción.\n5. Sube al menos una foto clara de la mascota.\n6. Indica la ubicación y haz clic en 'Publicar'. ¡Listo!"
   },
   {
-    "keywords": ["contactar", "hablar", "mensaje", "dueño", "encuentro", "comunicar"],
-    "response": "Cuando se confirma una coincidencia, se habilitará la opción para ver los datos de contacto o acceder a un chat con el otro usuario para coordinar la entrega."
+    "keywords": ["registro", "registrar", "crear cuenta", "nueva cuenta", "unirme", "como me uno"],
+    "response": "Para crear una cuenta:\n1. Haz clic en 'Registrarse' en la pantalla de inicio.\n2. Completa tus datos: nombre, RUT, correo y contraseña.\n3. Selecciona tu tipo de cuenta (ciudadano, veterinaria o municipalidad).\n4. ¡Ya puedes iniciar sesión y usar la plataforma!"
   },
   {
-    "keywords": ["cuenta", "perfil", "registro", "contraseña", "datos", "actualizar", "crear", "sesión"],
-    "response": "Puedes gestionar tu cuenta, actualizar tu información personal o cambiar tu contraseña ingresando a la sección 'Mi Cuenta', Una vez que inicies sesión"
+    "keywords": ["iniciar sesion", "login", "ingresar", "entrar", "acceder", "no puedo entrar"],
+    "response": "Para iniciar sesión:\n1. Haz clic en 'Iniciar Sesión'.\n2. Ingresa tu correo electrónico y contraseña.\n3. Si olvidaste tu contraseña, usa la opción 'Recuperar contraseña'.\nSi sigues sin poder ingresar, crea un ticket de soporte y te ayudaremos."
   },
   {
-    "keywords": ["ticket", "soporte", "ayuda", "tecnico", "error", "falla", "problema"],
-    "response": "Si estás experimentando problemas técnicos, por favor crea un ticket de soporte detallando el error y nuestro equipo te ayudará a la brevedad."
+    "keywords": ["contrasena", "olvide", "recuperar", "cambiar clave", "reset", "clave"],
+    "response": "Para recuperar o cambiar tu contraseña:\n1. En la pantalla de inicio de sesión, haz clic en '¿Olvidaste tu contraseña?'.\n2. Ingresa tu correo registrado.\n3. Recibirás un enlace para crear una nueva contraseña.\nSi no recibes el correo, revisa tu carpeta de spam o crea un ticket de soporte."
+  },
+  {
+    "keywords": ["perfil", "mi cuenta", "actualizar", "editar", "mis datos", "datos personales"],
+    "response": "Para actualizar tu perfil:\n1. Inicia sesión y haz clic en tu nombre o avatar.\n2. Ve a 'Mi Cuenta' o 'Perfil'.\n3. Edita los campos que deseas cambiar (nombre, foto, teléfono, etc.).\n4. Guarda los cambios.\nSi necesitas cambiar tu correo o RUT, crea un ticket de soporte."
+  },
+  {
+    "keywords": ["matching", "coincidencia", "match", "como funciona", "sistema", "notificacion", "alerta"],
+    "response": "El sistema de matching funciona así:\n1. Al publicar un reporte, el sistema lo compara automáticamente con reportes del tipo opuesto.\n2. Si hay chip registrado y coincide, el match es automático (100%).\n3. Sin chip, el sistema usa color (40%), tamaño (20%) y distancia (40%) para calcular el puntaje.\n4. Si el puntaje supera el 60%, se crea una posible coincidencia y se te notifica.\n5. Puedes aceptar o rechazar el match desde la plataforma."
+  },
+  {
+    "keywords": ["mapa", "ver mapa", "cerca", "zona", "ubicacion", "buscar"],
+    "response": "Para usar el mapa:\n1. Ve a la sección 'Mapa' en el menú.\n2. Verás los reportes activos de mascotas perdidas y encontradas en Chile.\n3. Usa los filtros para buscar por especie o tipo de reporte.\n4. Haz clic en un marcador para ver el detalle del reporte."
+  },
+  {
+    "keywords": ["chat", "mensaje", "contactar", "hablar", "comunicar", "escribir", "dueno"],
+    "response": "Para contactar a otro usuario:\n1. Necesitas tener una coincidencia aceptada por ambas partes.\n2. Una vez aceptada, se habilitará un chat privado entre los dos.\n3. Ve a 'Mis Matches' y selecciona la conversación.\n4. Coordinen el punto de encuentro o la entrega de la mascota."
+  },
+  {
+    "keywords": ["denunciar", "abuso", "reporte de abuso", "comportamiento", "acoso", "mal usuario"],
+    "response": "Para reportar un abuso o comportamiento inapropiado:\n1. Ve a 'Soporte' y crea un ticket con la categoría 'Reporte de Abuso'.\n2. Describe detalladamente la situación e incluye capturas de pantalla si es posible.\n3. Nuestro equipo revisará el caso a la brevedad."
+  },
+  {
+    "keywords": ["ticket", "soporte", "problema", "error", "falla", "no funciona", "bug", "ayuda"],
+    "response": "Para crear un ticket de soporte:\n1. Ve a la sección 'Soporte' en el menú.\n2. Selecciona la categoría: Problema Técnico, Reporte de Abuso u Otro.\n3. Describe el problema con el mayor detalle posible.\n4. Nuestro equipo te responderá a la brevedad."
+  },
+  {
+    "keywords": ["gracias", "muchas gracias", "ok gracias", "listo"],
+    "response": "¡De nada! Si tienes más preguntas, aquí estaré. Espero que encuentres a tu mascota pronto 🐾."
   }
 ]
