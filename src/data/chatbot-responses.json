@@ -1,7 +1,7 @@
 [
   {
     "keywords": ["hola", "saludo", "buen", "dia", "tarde", "noche"],
-    "response": "¡Hola! Soy el asistente virtual de Sanos y Salvos. ¿En qué te puedo ayudar hoy respecto a mascotas perdidas o encontradas?"
+    "response": "¡Hola! Soy el asistente virtual de Sanos y Salvos. ¿En qué te puedo ayudar?"
   },
   {
     "keywords": ["reportar", "perdida", "encontrada", "publicar", "subir", "crear reporte", "perro", "gato"],
@@ -20,8 +20,8 @@
     "response": "Cuando se confirma una coincidencia, se habilitará la opción para ver los datos de contacto o acceder a un chat con el otro usuario para coordinar la entrega."
   },
   {
-    "keywords": ["cuenta", "perfil", "registro", "contraseña", "datos", "actualizar", "crear"],
-    "response": "Puedes gestionar tu cuenta, actualizar tu información personal o cambiar tu contraseña ingresando a la sección 'Mi Cuenta'."
+    "keywords": ["cuenta", "perfil", "registro", "contraseña", "datos", "actualizar", "crear", "sesión"],
+    "response": "Puedes gestionar tu cuenta, actualizar tu información personal o cambiar tu contraseña ingresando a la sección 'Mi Cuenta', Una vez que inicies sesión"
   },
   {
     "keywords": ["ticket", "soporte", "ayuda", "tecnico", "error", "falla", "problema"],
