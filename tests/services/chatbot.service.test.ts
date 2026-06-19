@@ -3,7 +3,7 @@ import { preguntarChatbot } from '../../src/services/chatbot.service';
 describe('services/chatbot.service', () => {
   it('retorna la respuesta correcta para una palabra clave', async () => {
     const result = await preguntarChatbot('hola, buenos días');
-    expect(result).toBe('¡Hola! Soy el asistente virtual de Sanos y Salvos. ¿En qué te puedo ayudar hoy respecto a mascotas perdidas o encontradas?');
+    expect(result).toBe('¡Hola! Soy el asistente virtual de Sanos y Salvos. ¿En qué te puedo ayudar?');
   });
 
   it('ignora los acentos y mayúsculas al buscar palabras clave', async () => {

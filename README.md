@@ -1,10 +1,3 @@
-npm run dev
-
-docker compose up --build
-
-docker compose down
-
-
 # MS-Soporte — Sanos y Salvos
 
 Microservicio de soporte técnico de la plataforma **Sanos y Salvos**. Gestiona el ciclo completo de tickets de soporte, comentarios en hilo único y un chatbot con inteligencia artificial para responder preguntas frecuentes.
@@ -24,57 +17,58 @@ Microservicio de soporte técnico de la plataforma **Sanos y Salvos**. Gestiona 
 
 ---
 
-## Requisitos previos
+## Arquitectura
 
-- Node.js 18+
-- PostgreSQL 16+
+### Patrón arquitectónico
 
----
+- **MVC (Model-View-Controller)**: Adaptado para APIs REST (Model-Route-Controller-Service). Los *Controllers* gestionan las solicitudes y respuestas HTTP, las *Routes* definen los endpoints, y la lógica de negocio se centraliza en los *Services*. Los *Models* representan las entidades de la base de datos.
 
-## Instalación
+### Patrón de diseño
 
-```bash
-git clone <url-del-repositorio>
-cd ms-soporte
-npm install
-```
+- **Repository Pattern**: Utilizado a través de TypeORM para abstraer la capa de acceso a datos. Los servicios se comunican con los repositorios para realizar operaciones sobre la base de datos (CRUD) sin acoplarse directamente a sentencias SQL.
 
 ---
 
-## Variables de entorno
+## Estructura del proyecto
 
-Crea un archivo `.env` basándote en `.env.example`:
-
-```env
-PORT=3003
-
-# PostgreSQL
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=tu_password
-DB_NAME=ms_soporte
-
-# JWT (mismo secret que MS-Auth)
-JWT_SECRET=tu_secreto_super_seguro
-JWT_EXPIRES_IN=15m
-
-NODE_ENV=development
-TYPEORM_SYNCHRONIZE=true
 ```
-
----
-
-## Base de datos
-
-```bash
-psql postgres
-CREATE DATABASE ms_soporte;
-\q
+ms-soporte/
+├── src/
+│   ├── config/
+│   │   ├── db.ts           # Conexión PostgreSQL + TypeORM
+│   │   └── swagger.ts      # Configuración OpenAPI
+│   ├── controllers/
+│   │   ├── ticket.controller.ts
+│   │   └── chatbot.controller.ts
+│   ├── data/
+│   │   └── chatbot-responses.json # Reglas del chatbot
+│   ├── middlewares/
+│   │   ├── errorHandler.ts
+│   │   ├── notFound.ts
+│   │   └── verifyToken.ts  # Verifica JWT + middleware soloAdmin
+│   ├── models/
+│   │   ├── Ticket.ts       # Entidad con estados y categorías
+│   │   └── Comentario.ts   # Hilo de comentarios por ticket
+│   ├── routes/
+│   │   ├── ticket.routes.ts
+│   │   └── chatbot.routes.ts
+│   ├── services/
+│   │   ├── ticket.service.ts
+│   │   └── chatbot.service.ts
+│   ├── utils/
+│   │   ├── email.ts        # Configuración para el envío de correos
+│   │   └── response.ts
+│   ├── app.ts
+│   └── server.ts
+├── tests/                  # Pruebas unitarias
+├── Dockerfile              # Configuración de contenedor
+├── docker-compose.yml      # Servicios Docker (App + DB)
+├── package.json
+├── .env
+├── .env.example
+├── .gitignore
+└── README.md
 ```
-
-TypeORM usa `TYPEORM_SYNCHRONIZE=true` en desarrollo y debe ir en `false` en producción.
-
 ---
 
 ## Levantar el servidor
@@ -86,12 +80,6 @@ npm run dev
 # Producción
 npm run build
 npm start
-```
-
-Salida esperada:
-```
-✅ Conexión a PostgreSQL establecida
-🚀 MS-Soporte corriendo en http://localhost:3003
 ```
 
 ---
@@ -108,26 +96,60 @@ http://localhost:3003/api/docs
 
 ### Tickets
 
-| Método | Ruta | RF | Descripción | Auth | Rol |
-|---|---|---|---|---|---|
-| POST | `/api/tickets` | RF-40 | Crear ticket | Sí | Usuario |
-| GET | `/api/tickets/mis-tickets` | RF-41 | Ver mis tickets | Sí | Usuario |
-| GET | `/api/tickets/:id` | — | Ver ticket por ID | Sí | Usuario |
-| POST | `/api/tickets/:id/comentarios` | RF-42 | Añadir comentario | Sí | Usuario |
-| GET | `/api/tickets` | RF-43 | Listar todos los tickets | Sí | Administrador |
-| PATCH | `/api/tickets/:id/asignar` | RF-44 | Tomar/asignar ticket | Sí | Administrador |
-| POST | `/api/tickets/:id/responder` | RF-45 | Responder ticket | Sí | Administrador |
-| PATCH | `/api/tickets/:id/estado` | RF-46 | Actualizar estado | Sí | Administrador |
+| Método | Ruta | Descripción | Rol |
+|---|---|---|---|
+| POST | `/api/tickets/publico` | Crear ticket público (sin autenticación) | Público |
+| POST | `/api/tickets` | Crear ticket | Usuario |
+| GET | `/api/tickets/mis-tickets` | Ver mis tickets | Usuario |
+| GET | `/api/tickets/:id`| Ver ticket por ID | Usuario |
+| POST | `/api/tickets/:id/comentarios` | Añadir comentario | Usuario |
+| GET | `/api/tickets` | Listar todos los tickets | Administrador |
+| PATCH | `/api/tickets/:id/asignar` | Tomar/asignar ticket | Administrador |
+| POST | `/api/tickets/:id/responder` | Responder ticket | Administrador |
+| PATCH | `/api/tickets/:id/estado` | Actualizar estado | Administrador |
 
 ### Chatbot
 
-| Método | Ruta | RF | Descripción | Auth |
-|---|---|---|---|---|
-| POST | `/api/chatbot/preguntar` | RF-47 | Consultar al chatbot | Sí |
+| Método | Ruta | Descripción |
+|---|---|---|
+| POST | `/api/chatbot/preguntar` | Consultar al chatbot |
 
 ---
 
 ## Pruebas en Postman
+
+### Prueba 0 — Crear ticket público (sin autenticación)
+```
+POST http://localhost:3003/api/tickets/publico
+```
+Body:
+```json
+{
+    "email": "ciudadano@ejemplo.com",
+    "categoria": "problema_tecnico",
+    "asunto": "Problema con luminaria",
+    "descripcion": "Hay una luminaria apagada en la calle 5."
+}
+```
+Respuesta esperada:
+```json
+{
+    "ok": true,
+    "data": {
+        "id": "uuid-generado",
+        "email_contacto": "ciudadano@ejemplo.com",
+        "categoria": "problema_tecnico",
+        "asunto": "Problema con luminaria",
+        "descripcion": "Hay una luminaria apagada en la calle 5.",
+        "estado": "abierto",
+        "asignado_a": null,
+        "created_at": "...",
+        "updated_at": "..."
+    }
+}
+```
+
+---
 
 ### Prueba 1 — Crear ticket (RF-40)
 ```
@@ -237,12 +259,11 @@ Estados válidos: `abierto`, `en_proceso`, `resuelto`, `cerrado`
 ### Prueba 8 — Chatbot (RF-47)
 ```
 POST http://localhost:3003/api/chatbot/preguntar
-Authorization: Bearer <accessToken>
 ```
 Body:
 ```json
 {
-    "pregunta": "¿Cómo reporto una mascota perdida?"
+    "pregunta": "¿Cómo puedo crear un ticket de soporte?"
 }
 ```
 Respuesta esperada:
@@ -250,7 +271,7 @@ Respuesta esperada:
 {
     "ok": true,
     "data": {
-        "respuesta": "Para reportar una mascota perdida debes..."
+        "respuesta": "Si estás experimentando problemas técnicos, por favor crea un ticket de soporte detallando el error y nuestro equipo te ayudará a la brevedad."
     }
 }
 ```
@@ -284,56 +305,25 @@ El hilo de comentarios es único por ticket. Cada comentario identifica quién l
 
 ---
 
-## Estructura del proyecto
+## Pruebas Unitarias
 
-```
-ms-soporte/
-├── src/
-│   ├── config/
-│   │   ├── db.ts           # Conexión PostgreSQL + TypeORM
-│   │   └── swagger.ts      # Configuración OpenAPI
-│   ├── controllers/
-│   │   ├── ticket.controller.ts
-│   │   └── chatbot.controller.ts
-│   ├── middlewares/
-│   │   ├── errorHandler.ts
-│   │   ├── notFound.ts
-│   │   └── verifyToken.ts  # Verifica JWT + middleware soloAdmin
-│   ├── models/
-│   │   ├── Ticket.ts       # Entidad con estados y categorías
-│   │   └── Comentario.ts   # Hilo de comentarios por ticket
-│   ├── routes/
-│   │   ├── ticket.routes.ts
-│   │   └── chatbot.routes.ts
-│   ├── services/
-│   │   ├── ticket.service.ts
-│   │   └── chatbot.service.ts  # Integración del Chatbot con archivo JSON
-│   ├── utils/
-│   │   └── response.ts
-│   ├── app.ts
-│   └── server.ts
-├── .env
-├── .env.example
-├── .gitignore
-└── README.md
+El proyecto cuenta con una suite de pruebas unitarias para garantizar la calidad y el correcto funcionamiento de los servicios.
+
+**Ejecutar las pruebas:**
+```bash
+npm run test
 ```
 
----
+**Generar reporte de cobertura:**
+```bash
+npm run test:coverage
+```
 
-## Scripts
+Para visualizar el reporte de cobertura detallado, abre el archivo generado en tu navegador:
+```bash
+open coverage/index.html
+```
 
-| Comando | Descripción |
-|---|---|
-| `npm run dev` | Servidor en modo desarrollo con hot reload |
-| `npm run build` | Compila TypeScript a JavaScript |
-| `npm start` | Ejecuta la versión compilada |
+**Reporte de cobertura:**
 
----
-
-## Decisiones técnicas
-
-- **Chatbot basado en JSON:** Permite respuestas rápidas a preguntas frecuentes usando un archivo local sin depender de APIs externas.
-- **Hilo único de comentarios:** usuarios y administradores comparten el mismo hilo identificados por `tipo_autor`, facilitando el seguimiento cronológico de la conversación.
-- **Middleware `soloAdmin`:** protege todos los endpoints administrativos verificando que el rol en el JWT sea `administrador`.
-- **Soft close de tickets:** los tickets cerrados no aceptan nuevos comentarios pero el historial se conserva íntegro en la base de datos.
-- **UUID como identificador:** previene enumeración maliciosa de tickets (IDOR).
+![Reporte de pruebas unitarias](./assets/Screenshot_2026-06-18_20-20-47.png)

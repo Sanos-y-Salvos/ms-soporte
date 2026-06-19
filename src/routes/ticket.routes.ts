@@ -6,6 +6,40 @@ const router = Router();
 
 /**
  * @swagger
+ * /api/tickets/publico:
+ *   post:
+ *     summary: Crear ticket público (sin autenticación)
+ *     tags: [Tickets]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, categoria, descripcion]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: ciudadano@ejemplo.com
+ *               categoria:
+ *                 type: string
+ *                 enum: [problema_tecnico, reporte_abuso, otro]
+ *               asunto:
+ *                 type: string
+ *                 example: Problema con luminaria
+ *               descripcion:
+ *                 type: string
+ *                 example: Hay una luminaria apagada en la calle 5.
+ *     responses:
+ *       201:
+ *         description: Ticket público creado exitosamente
+ *       400:
+ *         description: Faltan datos obligatorios
+ */
+
+/**
+ * @swagger
  * /api/tickets:
  *   post:
  *     summary: Crear ticket (RF-40)

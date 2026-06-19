@@ -9,8 +9,6 @@ const router = Router();
  *   post:
  *     summary: Consultar al chatbot (RF-47)
  *     tags: [Chatbot]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -21,7 +19,7 @@ const router = Router();
  *             properties:
  *               pregunta:
  *                 type: string
- *                 example: ¿Cómo reporto una mascota perdida?
+ *                 example: ¿Cómo puedo crear un ticket de soporte?
  *     responses:
  *       200:
  *         description: Respuesta del chatbot
