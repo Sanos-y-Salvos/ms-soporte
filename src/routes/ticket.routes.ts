@@ -99,6 +99,7 @@ router.get('/', verifyToken, soloAdmin, TicketController.listarTickets);
  *       200:
  *         description: Lista de tickets del usuario autenticado
  */
+router.get('/estadisticas', verifyToken, soloAdmin, TicketController.getEstadisticas);
 router.get('/mis-tickets', verifyToken, TicketController.misTickets);
 
 /**

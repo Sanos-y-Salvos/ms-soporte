@@ -105,6 +105,16 @@ export const actualizarEstado = async (req: AuthRequest, res: Response): Promise
     errorResponse(res, err.message);
   }
 };
+// Admin — Estadísticas para el dashboard
+export const getEstadisticas = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const data = await TicketService.getEstadisticas();
+    successResponse(res, data);
+  } catch (err: any) {
+    errorResponse(res, err.message);
+  }
+};
+
 // Público — Crear ticket sin autenticación
 export const crearTicketPublico = async (req: Request, res: Response): Promise<void> => {
   try {
