@@ -1,7 +1,7 @@
-jest.mock('../../src/services/chatbot.service');
+jest.mock('../../services/chatbot.service');
 
-import * as ChatbotService from '../../src/services/chatbot.service';
-import * as ChatbotController from '../../src/controllers/chatbot.controller';
+import * as ChatbotService from '../../services/chatbot.service';
+import * as ChatbotController from '../../controllers/chatbot.controller';
 
 const mocked = ChatbotService as jest.Mocked<typeof ChatbotService>;
 

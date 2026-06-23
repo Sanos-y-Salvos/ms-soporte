@@ -326,4 +326,4 @@ open coverage/index.html
 
 **Reporte de cobertura:**
 
-![Reporte de pruebas unitarias](./assets/Screenshot_2026-06-18_20-20-47.png)
+![Reporte de pruebas unitarias](./assets/Screenshot_2026-06-22_20-20-47.png) 

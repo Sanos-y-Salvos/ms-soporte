@@ -1,9 +1,9 @@
-jest.mock('../../src/services/ticket.service');
+jest.mock('../../services/ticket.service');
 
-import * as TicketService from '../../src/services/ticket.service';
-import * as TicketController from '../../src/controllers/ticket.controller';
-import { CategoriaTicket, EstadoTicket } from '../../src/models/Ticket';
-import { TipoAutor } from '../../src/models/Comentario';
+import * as TicketService from '../../services/ticket.service';
+import * as TicketController from '../../controllers/ticket.controller';
+import { CategoriaTicket, EstadoTicket } from '../../models/Ticket';
+import { TipoAutor } from '../../models/Comentario';
 
 const mocked = TicketService as jest.Mocked<typeof TicketService>;
 
@@ -35,6 +35,40 @@ describe('controllers/ticket.controller', () => {
       expect(mocked.crearTicket).toHaveBeenCalledWith('u1', CategoriaTicket.OTRO, 'a', 'd');
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith({ ok: true, data: { id: 't1' } });
+    });
+
+    it('usa asunto por defecto para problema_tecnico', async () => {
+      mocked.crearTicket.mockResolvedValue({ id: 't1' } as any);
+      const req: any = {
+        user: { id: 'u1' },
+        body: { categoria: CategoriaTicket.PROBLEMA_TECNICO, descripcion: 'd' },
+      };
+      const res = buildRes();
+      await TicketController.crearTicket(req, res);
+      expect(mocked.crearTicket).toHaveBeenCalledWith('u1', CategoriaTicket.PROBLEMA_TECNICO, 'Problema técnico', 'd');
+      expect(res.status).toHaveBeenCalledWith(201);
+    });
+
+    it('usa asunto por defecto para reporte_abuso', async () => {
+      mocked.crearTicket.mockResolvedValue({ id: 't1' } as any);
+      const req: any = {
+        user: { id: 'u1' },
+        body: { categoria: CategoriaTicket.REPORTE_ABUSO, descripcion: 'd' },
+      };
+      const res = buildRes();
+      await TicketController.crearTicket(req, res);
+      expect(mocked.crearTicket).toHaveBeenCalledWith('u1', CategoriaTicket.REPORTE_ABUSO, 'Reporte de abuso', 'd');
+    });
+
+    it('responde 400 si categoria es otro y no hay asunto', async () => {
+      const req: any = {
+        user: { id: 'u1' },
+        body: { categoria: CategoriaTicket.OTRO, descripcion: 'd' },
+      };
+      const res = buildRes();
+      await TicketController.crearTicket(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(mocked.crearTicket).not.toHaveBeenCalled();
     });
 
     it('responde 400 si el servicio lanza error', async () => {
@@ -207,6 +241,26 @@ describe('controllers/ticket.controller', () => {
       const req: any = { params: { id: 't1' }, body: { estado: EstadoTicket.RESUELTO } };
       const res = buildRes();
       await TicketController.actualizarEstado(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+    });
+  });
+
+  describe('getEstadisticas', () => {
+    it('responde 200 con los datos de estadísticas', async () => {
+      const stats = { total: 5, por_estado: [], por_categoria: [], por_mes: [], por_mes_categoria: [], tiempo_resolucion: [] };
+      mocked.getEstadisticas.mockResolvedValue(stats as any);
+      const req: any = {};
+      const res = buildRes();
+      await TicketController.getEstadisticas(req, res);
+      expect(mocked.getEstadisticas).toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalledWith({ ok: true, data: stats });
+    });
+
+    it('propaga errores', async () => {
+      mocked.getEstadisticas.mockRejectedValue(new Error('db error'));
+      const req: any = {};
+      const res = buildRes();
+      await TicketController.getEstadisticas(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
     });
   });

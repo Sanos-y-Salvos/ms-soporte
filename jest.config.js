@@ -6,7 +6,7 @@ module.exports = {
   transform: {
     '^.+\\.ts$': ['ts-jest', { tsconfig: 'tsconfig.test.json' }],
   },
-  roots: ['<rootDir>/src', '<rootDir>/tests'],
+  roots: ['<rootDir>/src'],
   testMatch: ['**/*.test.ts'],
   collectCoverage: true,
   coverageDirectory: 'coverage',
@@ -18,6 +18,7 @@ module.exports = {
     '!src/config/**',
     '!src/routes/**',
     '!src/models/**',
+    '!src/tests/**',
   ],
   coverageThreshold: {
     global: {
@@ -28,5 +29,5 @@ module.exports = {
     },
   },
   clearMocks: true,
-  setupFiles: ['<rootDir>/tests/setup.ts'],
+  setupFiles: ['<rootDir>/src/tests/setup.ts'],
 };

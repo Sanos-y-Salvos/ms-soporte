@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { verifyToken, soloAdmin, AuthRequest } from '../../src/middlewares/verifyToken';
+import { verifyToken, soloAdmin, AuthRequest } from '../../middlewares/verifyToken';
 
 jest.mock('jsonwebtoken');
 
