@@ -13,7 +13,7 @@ const comentarioRepoMock = {
 };
 const dbQueryMock = jest.fn();
 
-jest.mock('../../src/config/db', () => ({
+jest.mock('../../config/db', () => ({
   AppDataSource: {
     getRepository: jest.fn((entity: any) => {
       const name = entity?.name ?? entity;
@@ -26,14 +26,14 @@ jest.mock('../../src/config/db', () => ({
 }));
 
 jest.mock('axios');
-jest.mock('../../src/utils/email');
+jest.mock('../../utils/email');
 
-import * as TicketService from '../../src/services/ticket.service';
-import * as EmailUtils from '../../src/utils/email';
+import * as TicketService from '../../services/ticket.service';
+import * as EmailUtils from '../../utils/email';
 
 const mockedEmail = EmailUtils as jest.Mocked<typeof EmailUtils>;
-import { EstadoTicket, CategoriaTicket } from '../../src/models/Ticket';
-import { TipoAutor } from '../../src/models/Comentario';
+import { EstadoTicket, CategoriaTicket } from '../../models/Ticket';
+import { TipoAutor } from '../../models/Comentario';
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
@@ -236,6 +236,7 @@ describe('services/ticket.service', () => {
   });
 
   describe('getEstadisticas', () => {
+<<<<<<< HEAD:tests/services/ticket.service.test.ts
     it('retorna resumen por estado, categoría, mes y tiempo de resolución', async () => {
       dbQueryMock
         .mockResolvedValueOnce([{ count: 10 }])
@@ -244,11 +245,24 @@ describe('services/ticket.service', () => {
         .mockResolvedValueOnce([{ mes: '2024-01', count: 10 }])
         .mockResolvedValueOnce([{ mes: '2024-01', categoria: 'otro', count: 10 }])
         .mockResolvedValueOnce([{ categoria: 'otro', dias_promedio: 2.5 }]);
+=======
+    const { AppDataSource } = require('../../config/db');
+
+    it('retorna estadísticas consolidadas', async () => {
+      AppDataSource.query = jest.fn()
+        .mockResolvedValueOnce([{ count: 10 }])
+        .mockResolvedValueOnce([{ estado: 'abierto', count: 5 }, { estado: 'cerrado', count: 5 }])
+        .mockResolvedValueOnce([{ categoria: 'problema_tecnico', count: 3 }])
+        .mockResolvedValueOnce([{ mes: '2024-01', count: 10 }])
+        .mockResolvedValueOnce([{ mes: '2024-01', categoria: 'otro', count: 2 }])
+        .mockResolvedValueOnce([{ categoria: 'otro', dias_promedio: 1.5 }]);
+>>>>>>> b5fc2134358c6be00919f012c2a0daadfe83c49e:src/tests/services/ticket.service.test.ts
 
       const result = await TicketService.getEstadisticas();
 
       expect(result.total).toBe(10);
       expect(result.por_estado).toEqual([
+<<<<<<< HEAD:tests/services/ticket.service.test.ts
         { estado: 'abierto',    count: 4 },
         { estado: 'en_proceso', count: 0 },
         { estado: 'resuelto',   count: 6 },
@@ -263,6 +277,18 @@ describe('services/ticket.service', () => {
       expect(result.por_mes_categoria).toEqual([{ mes: '2024-01', categoria: 'otro', count: 10 }]);
       expect(result.tiempo_resolucion).toEqual([{ categoria: 'otro', dias_promedio: 2.5 }]);
       expect(dbQueryMock).toHaveBeenCalledTimes(6);
+=======
+        { estado: 'abierto', count: 5 },
+        { estado: 'en_proceso', count: 0 },
+        { estado: 'resuelto', count: 0 },
+        { estado: 'cerrado', count: 5 },
+      ]);
+      expect(result.por_categoria).toEqual([
+        { categoria: 'problema_tecnico', count: 3 },
+        { categoria: 'reporte_abuso', count: 0 },
+        { categoria: 'otro', count: 0 },
+      ]);
+>>>>>>> b5fc2134358c6be00919f012c2a0daadfe83c49e:src/tests/services/ticket.service.test.ts
     });
   });
 

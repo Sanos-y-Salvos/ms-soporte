@@ -1,4 +1,4 @@
-import { errorHandler } from '../../src/middlewares/errorHandler';
+import { errorHandler } from '../../middlewares/errorHandler';
 
 describe('middlewares/errorHandler', () => {
   it('responde 500 y oculta el detalle', () => {

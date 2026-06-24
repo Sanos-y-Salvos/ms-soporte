@@ -8,7 +8,7 @@ const options: swaggerJsdoc.Options = {
       version: '1.0.0',
       description: 'Microservicio de soporte: tickets, comentarios y chatbot con IA',
     },
-    servers: [{ url: 'http://localhost:3003', description: 'Servidor de desarrollo' }],
+    servers: [{ url: 'http://localhost:3008', description: 'Servidor de desarrollo' }],
     components: {
       securitySchemes: {
         bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },

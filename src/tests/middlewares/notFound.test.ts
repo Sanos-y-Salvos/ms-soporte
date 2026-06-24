@@ -1,4 +1,4 @@
-import { notFound } from '../../src/middlewares/notFound';
+import { notFound } from '../../middlewares/notFound';
 
 describe('middlewares/notFound', () => {
   it('responde 404 con el mensaje estándar', () => {

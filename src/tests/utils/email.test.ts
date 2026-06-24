@@ -5,7 +5,7 @@ jest.mock('resend', () => ({
   })),
 }));
 
-import { enviarRespuestaTicket } from '../../src/utils/email';
+import { enviarRespuestaTicket } from '../../utils/email';
 import { Resend } from 'resend';
 
 describe('utils/email', () => {

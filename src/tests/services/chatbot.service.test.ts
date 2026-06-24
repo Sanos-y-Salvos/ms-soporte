@@ -1,4 +1,4 @@
-import { preguntarChatbot } from '../../src/services/chatbot.service';
+import { preguntarChatbot } from '../../services/chatbot.service';
 
 describe('services/chatbot.service', () => {
   it('retorna la respuesta correcta para una palabra clave', async () => {
@@ -8,7 +8,11 @@ describe('services/chatbot.service', () => {
 
   it('ignora los acentos y mayúsculas al buscar palabras clave', async () => {
     const result = await preguntarChatbot('quiero CÓntactar al DUEÑO');
+<<<<<<< HEAD:tests/services/chatbot.service.test.ts
     expect(result).toBe("Para contactar a otro usuario:\n1. Necesitas tener una coincidencia aceptada por ambas partes.\n2. Una vez aceptada, se habilitará un chat privado entre los dos.\n3. Ve a 'Mis Matches' y selecciona la conversación.\n4. Coordinen el punto de encuentro o la entrega de la mascota.");
+=======
+    expect(result).toBe('Para contactar a otro usuario:\n1. Necesitas tener una coincidencia aceptada por ambas partes.\n2. Una vez aceptada, se habilitará un chat privado entre los dos.\n3. Ve a \'Mis Matches\' y selecciona la conversación.\n4. Coordinen el punto de encuentro o la entrega de la mascota.');
+>>>>>>> b5fc2134358c6be00919f012c2a0daadfe83c49e:src/tests/services/chatbot.service.test.ts
   });
 
   it('retorna el mensaje por defecto si no hay coincidencias', async () => {

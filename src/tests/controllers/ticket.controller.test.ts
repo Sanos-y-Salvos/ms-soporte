@@ -1,9 +1,9 @@
-jest.mock('../../src/services/ticket.service');
+jest.mock('../../services/ticket.service');
 
-import * as TicketService from '../../src/services/ticket.service';
-import * as TicketController from '../../src/controllers/ticket.controller';
-import { CategoriaTicket, EstadoTicket } from '../../src/models/Ticket';
-import { TipoAutor } from '../../src/models/Comentario';
+import * as TicketService from '../../services/ticket.service';
+import * as TicketController from '../../controllers/ticket.controller';
+import { CategoriaTicket, EstadoTicket } from '../../models/Ticket';
+import { TipoAutor } from '../../models/Comentario';
 
 const mocked = TicketService as jest.Mocked<typeof TicketService>;
 
@@ -37,7 +37,11 @@ describe('controllers/ticket.controller', () => {
       expect(res.json).toHaveBeenCalledWith({ ok: true, data: { id: 't1' } });
     });
 
+<<<<<<< HEAD:tests/controllers/ticket.controller.test.ts
     it('usa asunto por defecto para problema_tecnico sin asunto', async () => {
+=======
+    it('usa asunto por defecto para problema_tecnico', async () => {
+>>>>>>> b5fc2134358c6be00919f012c2a0daadfe83c49e:src/tests/controllers/ticket.controller.test.ts
       mocked.crearTicket.mockResolvedValue({ id: 't1' } as any);
       const req: any = {
         user: { id: 'u1' },
@@ -49,7 +53,11 @@ describe('controllers/ticket.controller', () => {
       expect(res.status).toHaveBeenCalledWith(201);
     });
 
+<<<<<<< HEAD:tests/controllers/ticket.controller.test.ts
     it('usa asunto por defecto para reporte_abuso sin asunto', async () => {
+=======
+    it('usa asunto por defecto para reporte_abuso', async () => {
+>>>>>>> b5fc2134358c6be00919f012c2a0daadfe83c49e:src/tests/controllers/ticket.controller.test.ts
       mocked.crearTicket.mockResolvedValue({ id: 't1' } as any);
       const req: any = {
         user: { id: 'u1' },
@@ -58,10 +66,16 @@ describe('controllers/ticket.controller', () => {
       const res = buildRes();
       await TicketController.crearTicket(req, res);
       expect(mocked.crearTicket).toHaveBeenCalledWith('u1', CategoriaTicket.REPORTE_ABUSO, 'Reporte de abuso', 'd');
+<<<<<<< HEAD:tests/controllers/ticket.controller.test.ts
       expect(res.status).toHaveBeenCalledWith(201);
     });
 
     it('responde 400 si categoría es "otro" y no hay asunto', async () => {
+=======
+    });
+
+    it('responde 400 si categoria es otro y no hay asunto', async () => {
+>>>>>>> b5fc2134358c6be00919f012c2a0daadfe83c49e:src/tests/controllers/ticket.controller.test.ts
       const req: any = {
         user: { id: 'u1' },
         body: { categoria: CategoriaTicket.OTRO, descripcion: 'd' },
@@ -247,6 +261,7 @@ describe('controllers/ticket.controller', () => {
   });
 
   describe('getEstadisticas', () => {
+<<<<<<< HEAD:tests/controllers/ticket.controller.test.ts
     it('retorna las estadísticas correctamente', async () => {
       const stats = {
         total: 5,
@@ -256,6 +271,10 @@ describe('controllers/ticket.controller', () => {
         por_mes_categoria: [],
         tiempo_resolucion: [],
       };
+=======
+    it('responde 200 con los datos de estadísticas', async () => {
+      const stats = { total: 5, por_estado: [], por_categoria: [], por_mes: [], por_mes_categoria: [], tiempo_resolucion: [] };
+>>>>>>> b5fc2134358c6be00919f012c2a0daadfe83c49e:src/tests/controllers/ticket.controller.test.ts
       mocked.getEstadisticas.mockResolvedValue(stats as any);
       const req: any = {};
       const res = buildRes();
@@ -264,13 +283,20 @@ describe('controllers/ticket.controller', () => {
       expect(res.json).toHaveBeenCalledWith({ ok: true, data: stats });
     });
 
+<<<<<<< HEAD:tests/controllers/ticket.controller.test.ts
     it('propaga errores del servicio', async () => {
+=======
+    it('propaga errores', async () => {
+>>>>>>> b5fc2134358c6be00919f012c2a0daadfe83c49e:src/tests/controllers/ticket.controller.test.ts
       mocked.getEstadisticas.mockRejectedValue(new Error('db error'));
       const req: any = {};
       const res = buildRes();
       await TicketController.getEstadisticas(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
+<<<<<<< HEAD:tests/controllers/ticket.controller.test.ts
       expect(res.json).toHaveBeenCalledWith({ ok: false, message: 'db error' });
+=======
+>>>>>>> b5fc2134358c6be00919f012c2a0daadfe83c49e:src/tests/controllers/ticket.controller.test.ts
     });
   });
 
