@@ -37,6 +37,41 @@ describe('controllers/ticket.controller', () => {
       expect(res.json).toHaveBeenCalledWith({ ok: true, data: { id: 't1' } });
     });
 
+    it('usa asunto por defecto para problema_tecnico sin asunto', async () => {
+      mocked.crearTicket.mockResolvedValue({ id: 't1' } as any);
+      const req: any = {
+        user: { id: 'u1' },
+        body: { categoria: CategoriaTicket.PROBLEMA_TECNICO, descripcion: 'd' },
+      };
+      const res = buildRes();
+      await TicketController.crearTicket(req, res);
+      expect(mocked.crearTicket).toHaveBeenCalledWith('u1', CategoriaTicket.PROBLEMA_TECNICO, 'Problema técnico', 'd');
+      expect(res.status).toHaveBeenCalledWith(201);
+    });
+
+    it('usa asunto por defecto para reporte_abuso sin asunto', async () => {
+      mocked.crearTicket.mockResolvedValue({ id: 't1' } as any);
+      const req: any = {
+        user: { id: 'u1' },
+        body: { categoria: CategoriaTicket.REPORTE_ABUSO, descripcion: 'd' },
+      };
+      const res = buildRes();
+      await TicketController.crearTicket(req, res);
+      expect(mocked.crearTicket).toHaveBeenCalledWith('u1', CategoriaTicket.REPORTE_ABUSO, 'Reporte de abuso', 'd');
+      expect(res.status).toHaveBeenCalledWith(201);
+    });
+
+    it('responde 400 si categoría es "otro" y no hay asunto', async () => {
+      const req: any = {
+        user: { id: 'u1' },
+        body: { categoria: CategoriaTicket.OTRO, descripcion: 'd' },
+      };
+      const res = buildRes();
+      await TicketController.crearTicket(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(mocked.crearTicket).not.toHaveBeenCalled();
+    });
+
     it('responde 400 si el servicio lanza error', async () => {
       mocked.crearTicket.mockRejectedValue(new Error('boom'));
       const req: any = {
@@ -208,6 +243,34 @@ describe('controllers/ticket.controller', () => {
       const res = buildRes();
       await TicketController.actualizarEstado(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
+    });
+  });
+
+  describe('getEstadisticas', () => {
+    it('retorna las estadísticas correctamente', async () => {
+      const stats = {
+        total: 5,
+        por_estado: [],
+        por_categoria: [],
+        por_mes: [],
+        por_mes_categoria: [],
+        tiempo_resolucion: [],
+      };
+      mocked.getEstadisticas.mockResolvedValue(stats as any);
+      const req: any = {};
+      const res = buildRes();
+      await TicketController.getEstadisticas(req, res);
+      expect(mocked.getEstadisticas).toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalledWith({ ok: true, data: stats });
+    });
+
+    it('propaga errores del servicio', async () => {
+      mocked.getEstadisticas.mockRejectedValue(new Error('db error'));
+      const req: any = {};
+      const res = buildRes();
+      await TicketController.getEstadisticas(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ ok: false, message: 'db error' });
     });
   });
 

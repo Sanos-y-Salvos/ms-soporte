@@ -3,12 +3,12 @@ import { preguntarChatbot } from '../../src/services/chatbot.service';
 describe('services/chatbot.service', () => {
   it('retorna la respuesta correcta para una palabra clave', async () => {
     const result = await preguntarChatbot('hola, buenos días');
-    expect(result).toBe('¡Hola! Soy el asistente virtual de Sanos y Salvos. ¿En qué te puedo ayudar?');
+    expect(result).toBe('¡Hola! Soy el asistente virtual de Sanos y Salvos 🐾. Puedo ayudarte con: reportar mascotas, buscar en el mapa, gestionar tu cuenta, entender el sistema de matching o crear un ticket de soporte. ¿En qué te puedo ayudar?');
   });
 
   it('ignora los acentos y mayúsculas al buscar palabras clave', async () => {
     const result = await preguntarChatbot('quiero CÓntactar al DUEÑO');
-    expect(result).toBe('Cuando se confirma una coincidencia, se habilitará la opción para ver los datos de contacto o acceder a un chat con el otro usuario para coordinar la entrega.');
+    expect(result).toBe("Para contactar a otro usuario:\n1. Necesitas tener una coincidencia aceptada por ambas partes.\n2. Una vez aceptada, se habilitará un chat privado entre los dos.\n3. Ve a 'Mis Matches' y selecciona la conversación.\n4. Coordinen el punto de encuentro o la entrega de la mascota.");
   });
 
   it('retorna el mensaje por defecto si no hay coincidencias', async () => {

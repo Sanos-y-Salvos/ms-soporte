@@ -11,6 +11,7 @@ const comentarioRepoMock = {
   create: jest.fn(),
   save: jest.fn(),
 };
+const dbQueryMock = jest.fn();
 
 jest.mock('../../src/config/db', () => ({
   AppDataSource: {
@@ -20,6 +21,7 @@ jest.mock('../../src/config/db', () => ({
       if (name === 'Comentario') return comentarioRepoMock;
       return ticketRepoMock;
     }),
+    query: (...args: any[]) => dbQueryMock(...args),
   },
 }));
 
@@ -230,6 +232,37 @@ describe('services/ticket.service', () => {
       ticketRepoMock.findOne.mockResolvedValue(ticket);
       const result = await TicketService.verTicket('t1');
       expect(result).toBe(ticket);
+    });
+  });
+
+  describe('getEstadisticas', () => {
+    it('retorna resumen por estado, categoría, mes y tiempo de resolución', async () => {
+      dbQueryMock
+        .mockResolvedValueOnce([{ count: 10 }])
+        .mockResolvedValueOnce([{ estado: 'abierto', count: 4 }, { estado: 'resuelto', count: 6 }])
+        .mockResolvedValueOnce([{ categoria: 'otro', count: 10 }])
+        .mockResolvedValueOnce([{ mes: '2024-01', count: 10 }])
+        .mockResolvedValueOnce([{ mes: '2024-01', categoria: 'otro', count: 10 }])
+        .mockResolvedValueOnce([{ categoria: 'otro', dias_promedio: 2.5 }]);
+
+      const result = await TicketService.getEstadisticas();
+
+      expect(result.total).toBe(10);
+      expect(result.por_estado).toEqual([
+        { estado: 'abierto',    count: 4 },
+        { estado: 'en_proceso', count: 0 },
+        { estado: 'resuelto',   count: 6 },
+        { estado: 'cerrado',    count: 0 },
+      ]);
+      expect(result.por_categoria).toEqual([
+        { categoria: 'problema_tecnico', count: 0  },
+        { categoria: 'reporte_abuso',    count: 0  },
+        { categoria: 'otro',             count: 10 },
+      ]);
+      expect(result.por_mes).toEqual([{ mes: '2024-01', count: 10 }]);
+      expect(result.por_mes_categoria).toEqual([{ mes: '2024-01', categoria: 'otro', count: 10 }]);
+      expect(result.tiempo_resolucion).toEqual([{ categoria: 'otro', dias_promedio: 2.5 }]);
+      expect(dbQueryMock).toHaveBeenCalledTimes(6);
     });
   });
 
