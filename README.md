@@ -1,6 +1,8 @@
 # MS-Soporte — Sanos y Salvos
 
-Microservicio de soporte técnico de la plataforma **Sanos y Salvos**. Gestiona el ciclo completo de tickets de soporte, comentarios en hilo único y un chatbot con inteligencia artificial para responder preguntas frecuentes.
+Microservicio de soporte técnico de la plataforma **Sanos y Salvos**. Gestiona el ciclo completo de tickets de soporte, comentarios en hilo único y un chatbot basado en reglas de palabras clave para responder preguntas frecuentes.
+
+**Puerto:** `3005`
 
 ---
 
@@ -12,7 +14,7 @@ Microservicio de soporte técnico de la plataforma **Sanos y Salvos**. Gestiona 
 | TypeScript | Tipado estático |
 | PostgreSQL + TypeORM | Persistencia de tickets y comentarios |
 | JWT (jsonwebtoken) | Verificación de tokens |
-| Archivo JSON | Chatbot basado en reglas para preguntas frecuentes |
+| Archivo JSON (`chatbot-responses.json`) | Chatbot basado en coincidencia de palabras clave (sin LLM) |
 | Swagger (OpenAPI 3.0) | Documentación de endpoints |
 
 ---
@@ -87,7 +89,7 @@ npm start
 ## Documentación Swagger
 
 ```
-http://localhost:3003/api/docs
+http://localhost:3005/api/docs
 ```
 
 ---
@@ -120,7 +122,7 @@ http://localhost:3003/api/docs
 
 ### Prueba 0 — Crear ticket público (sin autenticación)
 ```
-POST http://localhost:3003/api/tickets/publico
+POST http://localhost:3005/api/tickets/publico
 ```
 Body:
 ```json
@@ -153,7 +155,7 @@ Respuesta esperada:
 
 ### Prueba 1 — Crear ticket (RF-40)
 ```
-POST http://localhost:3003/api/tickets
+POST http://localhost:3005/api/tickets
 Authorization: Bearer <accessToken>
 ```
 Body:
@@ -186,7 +188,7 @@ Respuesta esperada:
 
 ### Prueba 2 — Ver mis tickets (RF-41)
 ```
-GET http://localhost:3003/api/tickets/mis-tickets
+GET http://localhost:3005/api/tickets/mis-tickets
 Authorization: Bearer <accessToken>
 ```
 
@@ -194,7 +196,7 @@ Authorization: Bearer <accessToken>
 
 ### Prueba 3 — Añadir comentario (RF-42)
 ```
-POST http://localhost:3003/api/tickets/:id/comentarios
+POST http://localhost:3005/api/tickets/:id/comentarios
 Authorization: Bearer <accessToken>
 ```
 Body:
@@ -208,20 +210,20 @@ Body:
 
 ### Prueba 4 — Listar todos los tickets (RF-43) — solo administrador
 ```
-GET http://localhost:3003/api/tickets
+GET http://localhost:3005/api/tickets
 Authorization: Bearer <accessToken-administrador>
 ```
 
 Filtrar por estado:
 ```
-GET http://localhost:3003/api/tickets?estado=abierto
+GET http://localhost:3005/api/tickets?estado=abierto
 ```
 
 ---
 
 ### Prueba 5 — Tomar ticket (RF-44) — solo administrador
 ```
-PATCH http://localhost:3003/api/tickets/:id/asignar
+PATCH http://localhost:3005/api/tickets/:id/asignar
 Authorization: Bearer <accessToken-administrador>
 ```
 
@@ -229,7 +231,7 @@ Authorization: Bearer <accessToken-administrador>
 
 ### Prueba 6 — Responder ticket (RF-45) — solo administrador
 ```
-POST http://localhost:3003/api/tickets/:id/responder
+POST http://localhost:3005/api/tickets/:id/responder
 Authorization: Bearer <accessToken-administrador>
 ```
 Body:
@@ -243,7 +245,7 @@ Body:
 
 ### Prueba 7 — Actualizar estado (RF-46) — solo administrador
 ```
-PATCH http://localhost:3003/api/tickets/:id/estado
+PATCH http://localhost:3005/api/tickets/:id/estado
 Authorization: Bearer <accessToken-administrador>
 ```
 Body:
@@ -258,7 +260,7 @@ Estados válidos: `abierto`, `en_proceso`, `resuelto`, `cerrado`
 
 ### Prueba 8 — Chatbot (RF-47)
 ```
-POST http://localhost:3003/api/chatbot/preguntar
+POST http://localhost:3005/api/chatbot/preguntar
 ```
 Body:
 ```json
