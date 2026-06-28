@@ -4,6 +4,7 @@ import { successResponse, errorResponse } from '../utils/response';
 import { AuthRequest } from '../middlewares/verifyToken';
 import { CategoriaTicket, EstadoTicket } from '../models/Ticket';
 import { TipoAutor } from '../models/Comentario';
+import { getIo } from '../socket/io';
 
 // RF-40
 export const crearTicket = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -50,6 +51,7 @@ export const agregarComentario = async (req: AuthRequest, res: Response): Promis
     const { contenido } = req.body;
     if (!contenido) { errorResponse(res, 'Contenido requerido'); return; }
     const data = await TicketService.agregarComentario(ticketId, userId, TipoAutor.USUARIO, contenido);
+    getIo()?.to(`ticket:${ticketId}`).emit('comentario_recibido', data);
     successResponse(res, data, 201);
   } catch (err: any) {
     errorResponse(res, err.message);
@@ -87,6 +89,7 @@ export const responderTicket = async (req: AuthRequest, res: Response): Promise<
     const { contenido } = req.body;
     if (!contenido) { errorResponse(res, 'Contenido requerido'); return; }
     const data = await TicketService.responderTicket(ticketId, adminId, contenido);
+    getIo()?.to(`ticket:${ticketId}`).emit('comentario_recibido', data);
     successResponse(res, data, 201);
   } catch (err: any) {
     errorResponse(res, err.message);

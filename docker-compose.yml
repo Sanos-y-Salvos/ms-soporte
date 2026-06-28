@@ -24,11 +24,11 @@ services:
 
   ms-soporte:
     container_name: ms-soporte
-    image: felruiz/ms-soporte:latest
+    #image: felruiz/ms-soporte:latest
     build:
       context: .
       dockerfile: Dockerfile
-    platform: linux/amd64
+    #platform: linux/amd64
     ports:
       - "3005:3005" # Puerto actualizado a 3005
     environment:
@@ -49,6 +49,7 @@ services:
       # Sin esta variable cae al fallback 'http://localhost:3001' del código,
       # que no resuelve dentro de la red Docker — debe apuntar al contenedor de ms-auth.
       MS_AUTH_URL: http://ms-auth:3001
+      RESEND_API_KEY: ${RESEND_API_KEY:-re_f2GgvLj6_FbLp8cy2Bi4CYT5FkMCd6CbV}
     depends_on:
       db-ms-soporte:
         condition: service_healthy

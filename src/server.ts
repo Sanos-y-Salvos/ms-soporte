@@ -1,7 +1,11 @@
 import 'reflect-metadata';
+import http from 'http';
+import { Server } from 'socket.io';
 import { Client } from 'pg';
 import app from './app';
 import { AppDataSource } from './config/db';
+import { setIo } from './socket/io';
+import { setupTicketSocket } from './socket/ticketHandler';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -28,8 +32,14 @@ async function ensureDatabase() {
 ensureDatabase()
   .then(() => AppDataSource.initialize())
   .then(() => {
-    console.log('✅ Conexión a PostgreSQL establecida');
-    app.listen(PORT, () => {
+    const httpServer = http.createServer(app);
+    const io = new Server(httpServer, {
+      cors: { origin: '*', methods: ['GET', 'POST'] },
+    });
+    setIo(io);
+    setupTicketSocket(io);
+
+    httpServer.listen(PORT, () => {
       console.log(`🚀 MS-Soporte corriendo en http://localhost:${PORT}`);
     });
   })
