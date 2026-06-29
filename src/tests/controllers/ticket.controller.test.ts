@@ -1,4 +1,5 @@
 jest.mock('../../services/ticket.service');
+jest.mock('../../socket/io', () => ({ getIo: jest.fn().mockReturnValue(null) }));
 
 import * as TicketService from '../../services/ticket.service';
 import * as TicketController from '../../controllers/ticket.controller';

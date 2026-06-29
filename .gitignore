@@ -8,5 +8,5 @@ dist/
 .DS_Store
 .vscode/
 .idea/
-coverage/
 .env
+.claude/
