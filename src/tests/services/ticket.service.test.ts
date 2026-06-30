@@ -243,7 +243,9 @@ describe('services/ticket.service', () => {
         .mockResolvedValueOnce([{ categoria: 'otro', count: 10 }])
         .mockResolvedValueOnce([{ mes: '2024-01', count: 10 }])
         .mockResolvedValueOnce([{ mes: '2024-01', categoria: 'otro', count: 10 }])
-        .mockResolvedValueOnce([{ categoria: 'otro', dias_promedio: 2.5 }]);
+        .mockResolvedValueOnce([{ mes: '2024-01', estado: 'abierto', count: 4 }])
+        .mockResolvedValueOnce([{ categoria: 'otro', dias_promedio: 2.5 }])
+        .mockResolvedValueOnce([{ mes: '2024-01', categoria: 'otro', dias_promedio: 2.5 }]);
 
       const result = await TicketService.getEstadisticas();
 
@@ -261,8 +263,10 @@ describe('services/ticket.service', () => {
       ]);
       expect(result.por_mes).toEqual([{ mes: '2024-01', count: 10 }]);
       expect(result.por_mes_categoria).toEqual([{ mes: '2024-01', categoria: 'otro', count: 10 }]);
+      expect(result.por_mes_estado).toEqual([{ mes: '2024-01', estado: 'abierto', count: 4 }]);
       expect(result.tiempo_resolucion).toEqual([{ categoria: 'otro', dias_promedio: 2.5 }]);
-      expect(dbQueryMock).toHaveBeenCalledTimes(6);
+      expect(result.tiempo_resolucion_mensual).toEqual([{ mes: '2024-01', categoria: 'otro', dias_promedio: 2.5 }]);
+      expect(dbQueryMock).toHaveBeenCalledTimes(8);
     });
   });
 

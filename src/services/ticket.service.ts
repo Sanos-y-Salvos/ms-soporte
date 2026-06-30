@@ -98,13 +98,15 @@ export const getEstadisticas = async () => {
   const estados  = ['abierto', 'en_proceso', 'resuelto', 'cerrado'];
   const categorias = ['problema_tecnico', 'reporte_abuso', 'otro'];
 
-  const [total, por_estado_raw, por_categoria_raw, por_mes, por_mes_categoria, tiempo_resolucion] = await Promise.all([
+  const [total, por_estado_raw, por_categoria_raw, por_mes, por_mes_categoria, por_mes_estado, tiempo_resolucion, tiempo_resolucion_mensual] = await Promise.all([
     db.query('SELECT COUNT(*)::int AS count FROM tickets'),
     db.query('SELECT estado, COUNT(*)::int AS count FROM tickets GROUP BY estado'),
     db.query('SELECT categoria, COUNT(*)::int AS count FROM tickets GROUP BY categoria'),
     db.query("SELECT TO_CHAR(DATE_TRUNC('month', created_at), 'YYYY-MM') AS mes, COUNT(*)::int AS count FROM tickets GROUP BY mes ORDER BY mes"),
     db.query("SELECT TO_CHAR(DATE_TRUNC('month', created_at), 'YYYY-MM') AS mes, categoria, COUNT(*)::int AS count FROM tickets GROUP BY mes, categoria ORDER BY mes"),
+    db.query("SELECT TO_CHAR(DATE_TRUNC('month', created_at), 'YYYY-MM') AS mes, estado, COUNT(*)::int AS count FROM tickets GROUP BY mes, estado ORDER BY mes"),
     db.query("SELECT categoria, ROUND(AVG(EXTRACT(EPOCH FROM (updated_at - created_at)) / 86400)::numeric, 1)::float AS dias_promedio FROM tickets WHERE estado IN ('resuelto', 'cerrado') GROUP BY categoria"),
+    db.query("SELECT TO_CHAR(DATE_TRUNC('month', created_at), 'YYYY-MM') AS mes, categoria, ROUND(AVG(EXTRACT(EPOCH FROM (updated_at - created_at)) / 86400)::numeric, 1)::float AS dias_promedio FROM tickets WHERE estado IN ('resuelto', 'cerrado') GROUP BY mes, categoria ORDER BY mes"),
   ]);
 
   const estadoMap: Record<string, number> = Object.fromEntries(
@@ -115,12 +117,14 @@ export const getEstadisticas = async () => {
   );
 
   return {
-    total:              total[0].count,
-    por_estado:         estados.map(e  => ({ estado: e,    count: estadoMap[e]    ?? 0 })),
-    por_categoria:      categorias.map(c => ({ categoria: c, count: categoriaMap[c] ?? 0 })),
+    total:                     total[0].count,
+    por_estado:                estados.map(e  => ({ estado: e,    count: estadoMap[e]    ?? 0 })),
+    por_categoria:             categorias.map(c => ({ categoria: c, count: categoriaMap[c] ?? 0 })),
     por_mes,
     por_mes_categoria,
+    por_mes_estado,
     tiempo_resolucion,
+    tiempo_resolucion_mensual,
   };
 };
 
